@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<script>window.SHINBUN_BASE = "../"; window.SHINBUN_VENUE = "佐賀";</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>佐賀 競馬新聞</title>
+<style>
+:root{
+  --bg:#f6f4ee; --card:#ffffff; --fg:#1d1d1b; --sub:#6b6a63; --line:#dcd9cf; --head:#0e1116; --headfg:#f3ead2;
+  --r1:#fde2e0; --r1fg:#c0261b; --r2:#dfe9fb; --r2fg:#1f56b8; --r3:#e2f3e2; --r3fg:#237a33; --rx:#f7f6f2;
+  --mk:#c0261b; --mkA:#7a2bb5; --mkB:#0f7d76; --paper:#fffcf1; --paper2:#fff3cf; --hot:#c0261b; --chip:#efece4; --warn:#a15c00; --jra:#1a7f3c;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141413; --card:#1e1e1c; --fg:#ecebe6; --sub:#a3a199; --line:#34332f; --head:#0e1116; --headfg:#f3ead2;
+  --r1:#4a2120; --r1fg:#ff8d84; --r2:#1e2d4a; --r2fg:#86b1ff; --r3:#1f3a24; --r3fg:#7fd68e; --rx:#232321;
+  --mk:#ff8d84; --mkA:#c59af0; --mkB:#5fd1c8; --paper:#24221c; --paper2:#332c17; --hot:#ff8d84; --chip:#2a2a27; --warn:#e6a23c; --jra:#6fd391;
+}}
+:root[data-theme="dark"]{
+  --bg:#141413; --card:#1e1e1c; --fg:#ecebe6; --sub:#a3a199; --line:#34332f; --head:#0e1116; --headfg:#f3ead2;
+  --r1:#4a2120; --r1fg:#ff8d84; --r2:#1e2d4a; --r2fg:#86b1ff; --r3:#1f3a24; --r3fg:#7fd68e; --rx:#232321;
+  --mk:#ff8d84; --mkA:#c59af0; --mkB:#5fd1c8; --paper:#24221c; --paper2:#332c17; --hot:#ff8d84; --chip:#2a2a27; --warn:#e6a23c; --jra:#6fd391;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;font-size:13px}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#17130a,#0d0b07);color:var(--headfg);padding:8px 16px;border-bottom:2px solid #c9a45c}
+header h1{font-size:19px;margin:0;display:inline-block;color:#e8c56a;letter-spacing:.12em;font-family:"Shippori Mincho","Yu Mincho",serif}
+header .upd{font-size:12px;opacity:.8;margin-left:10px}
+header a.back{color:var(--headfg);font-size:12px;float:right;opacity:.85}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.tabs button{border:0;border-radius:6px;padding:5px 10px;font:inherit;cursor:pointer;background:rgba(255,255,255,.14);color:var(--headfg)}
+.tabs button.on{background:#e8c56a;color:#17130a;font-weight:700}
+.rtabs button{padding:4px 8px;font-size:12px}
+.rtabs button small{opacity:.7;margin-left:3px}
+main{padding:12px 16px 40px;width:fit-content;max-width:100%;box-sizing:border-box}
+.race{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.race h2{font-size:18px;margin:0 0 4px}
+.race .info{color:var(--sub)}
+.race .art{margin-top:6px;line-height:1.6;font-size:16px}
+.chip{display:inline-block;background:var(--chip);border-radius:4px;padding:1px 6px;margin-right:4px;font-size:12px}
+.legend{color:var(--sub);font-size:11px;margin:6px 0 0}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+table{border-collapse:collapse;width:auto}
+th{background:#1d232c;color:#e8c56a;font-weight:500;font-size:12px;padding:5px 4px;position:sticky;top:0}
+td{border-top:1px solid var(--line);vertical-align:top;padding:0}
+td.sticky,th.sticky{position:sticky;left:0;z-index:2}
+td.sticky{background:var(--card);box-shadow:2px 0 0 var(--line);height:1px}
+td.sticky .hn{height:100%;width:410px;min-width:410px;max-width:410px}
+th.sticky .hh{width:410px;min-width:410px;max-width:410px}
+td.sticky,th.sticky{width:410px} td.live{width:104px;min-width:104px;max-width:104px}
+th.sticky{z-index:3}
+.hn{display:flex;min-width:250px;max-width:270px}
+.fr{width:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+.fr small{font-size:10px;font-weight:500}
+.f1{background:#fff;color:#111;border-right:1px solid #ccc}.f2{background:#222;color:#fff}.f3{background:#d7261e;color:#fff}
+.f4{background:#1e5bc6;color:#fff}.f5{background:#f2cf1d;color:#111}.f6{background:#1c8a3c;color:#fff}
+.f7{background:#f08a1c;color:#111}.f8{background:#f19ec2;color:#111}
+.who{padding:5px 7px;flex:1;min-width:0}
+.hn{min-width:400px;max-width:420px}
+.mcol{width:44px;flex:0 0 44px;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--line);
+  background:var(--paper);font-family:"Shippori Mincho","Yu Mincho","Hiragino Mincho ProN",serif;font-weight:700;font-size:22px;color:var(--fg)}
+.mcol.m0{color:var(--mk);font-size:26px}
+.mcol.m1{font-size:27px}
+.mcol.ms{font-size:16px;color:var(--sub)}
+.mcol:last-of-type{border-right:2px solid var(--line)}
+.hh{display:flex;align-items:stretch;min-width:400px;max-width:420px}
+.hh > span{display:flex;align-items:center;justify-content:center}
+.hh .hf{width:30px;font-size:11px;line-height:1.2}
+.hh .hm{width:44px;flex:0 0 44px;font-size:10.5px;letter-spacing:-.05em;white-space:nowrap;line-height:1.25;text-align:center;padding:6px 0;border-left:1px solid rgba(232,197,106,.3)}
+.hh .hj{width:78px;flex:0 0 78px;font-size:11px;line-height:1.25;text-align:center;border-left:1px solid rgba(232,197,106,.3)}
+.hh .hn2{flex:1;border-left:1px solid rgba(232,197,106,.3)}
+.hh .hm.S{color:#17130a;background:#e8c56a;font-weight:600}
+.mcol.tot{background:var(--paper2)}
+.tsu{color:var(--sub);font-size:11px}
+.nm{font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta{color:var(--sub);font-size:11.5px;line-height:1.5}
+.sire{font-size:11.5px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kyu{font-size:13px;margin-top:1px}.kyu .lb{font-size:10.5px;color:var(--sub);border:1px solid var(--line);border-radius:3px;padding:0 3px;margin-right:4px;vertical-align:1px}
+.jbox{width:78px;flex:0 0 78px;border-left:1px dashed var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 2px;text-align:center}
+.jbox .jn{font-size:15.5px;font-weight:800;line-height:1.2;word-break:break-all}
+.jbox .kn{font-size:18px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums}
+.jbox .jchg{font-size:10.5px;color:#fff;background:var(--warn);border-radius:3px;padding:0 4px;margin-bottom:3px}
+.tag{color:var(--warn);font-size:11px}
+.live{padding:6px 4px;text-align:center;border-left:1px solid var(--line)}
+.odds{font-size:17px;font-weight:800}
+.odds.hot{color:var(--hot)}
+.pop{font-size:11px;color:var(--sub)}
+.bw{margin-top:6px;font-size:14px;font-weight:700}
+.bw .d{font-size:11px;font-weight:500}
+.bw .up{color:var(--r1fg)} .bw .dn{color:var(--r2fg)}
+.rec{font-size:11px;color:var(--sub);margin-top:6px;line-height:1.45;text-align:left}
+.run{min-width:158px;width:158px;max-width:158px;padding:4px 6px;border-left:1px solid var(--line);font-size:11.5px;line-height:1.45;background:var(--rx)}
+.run.c1{background:var(--r1)} .run.c2{background:var(--r2)} .run.c3{background:var(--r3)}
+.run .top{display:flex;justify-content:space-between;color:var(--sub)}
+.run .rk{font-size:19px;font-weight:800;line-height:1.1}
+.run.c1 .rk{color:var(--r1fg)} .run.c2 .rk{color:var(--r2fg)} .run.c3 .rk{color:var(--r3fg)}
+.run .rk small{font-size:11px;font-weight:500;color:var(--sub);margin-left:3px}
+.run .jra{color:var(--jra);font-weight:700}
+.run .cls{color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.run.none{color:var(--line);text-align:center;vertical-align:middle}
+.tanpyo{min-width:var(--tw,360px);width:var(--tw,360px);max-width:var(--tw,360px);padding:8px 12px;border-left:1px solid var(--line);font-size:19px;line-height:1.6;color:var(--fg);font-weight:500}
+.empty{padding:40px;text-align:center;color:var(--sub)}
+@media (max-width:600px){ header a.back{float:none;display:block;margin-bottom:2px} header h1{font-size:15px} main{padding:10px 8px 40px} }
+
+/* 枠色の薄い色（11/7 テツさん「ここまで枠番の色と同じにして。薄目の色で」）：馬番〜オッズ・馬体重の欄 */
+.w1{--tint:#f6f6f4} .w2{--tint:#e4e4e6} .w3{--tint:#fde3e1} .w4{--tint:#e0eafb}
+.w5{--tint:#fdf6d2} .w6{--tint:#ddf1e2} .w7{--tint:#fde9d4} .w8{--tint:#fce6f0}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .w1{--tint:#262624} :root:not([data-theme="light"]) .w2{--tint:#1c1c1f}
+ :root:not([data-theme="light"]) .w3{--tint:#3a2120} :root:not([data-theme="light"]) .w4{--tint:#1e2a40} :root:not([data-theme="light"]) .w5{--tint:#38331a}
+ :root:not([data-theme="light"]) .w6{--tint:#1d3324} :root:not([data-theme="light"]) .w7{--tint:#3a2a19} :root:not([data-theme="light"]) .w8{--tint:#3a2230}}
+:root[data-theme="dark"] .w1{--tint:#262624} :root[data-theme="dark"] .w2{--tint:#1c1c1f} :root[data-theme="dark"] .w3{--tint:#3a2120}
+:root[data-theme="dark"] .w4{--tint:#1e2a40} :root[data-theme="dark"] .w5{--tint:#38331a} :root[data-theme="dark"] .w6{--tint:#1d3324}
+:root[data-theme="dark"] .w7{--tint:#3a2a19} :root[data-theme="dark"] .w8{--tint:#3a2230}
+tr[class^="w"] td.sticky, tr[class^="w"] .mcol, tr[class^="w"] .mcol.tot, tr[class^="w"] td.live{background:var(--tint)}
+
+/* スマホ版（11/7 テツさん「スマホの場合、見えんやろ？」）：縦に1頭ずつ */
+.sp{display:flex;flex-direction:column;gap:10px}
+.sp .hc{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sp .hc .top{display:flex;align-items:stretch;background:var(--tint)}
+.sp .hc .fr{width:40px;font-size:22px}
+.sp .hc .nmb{flex:1;min-width:0;padding:6px 8px}
+.sp .hc .nmb .nm{font-size:18px;white-space:normal}
+.sp .hc .mks{display:flex}
+.sp .hc .mk2{width:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-left:1px solid var(--line);background:var(--paper)}
+.sp .hc .mk2.tot{background:var(--paper2)}
+.sp .hc .mk2 small{font-size:9.5px;color:var(--sub);white-space:nowrap;letter-spacing:-.05em}
+.sp .hc .mk2 b{font-family:"Shippori Mincho","Yu Mincho","Hiragino Mincho ProN",serif;font-size:26px;line-height:1.1;min-height:29px}
+.sp .hc .mk2 b.m0{color:var(--mk)}
+.sp .hc .row{display:flex;gap:10px;align-items:center;padding:6px 10px;border-top:1px solid var(--line);flex-wrap:wrap}
+.sp .hc .row .jn{font-size:16px;font-weight:800}
+.sp .hc .row .kn{font-size:16px;font-weight:800}
+.sp .hc .row .odds{font-size:22px}
+.sp .hc .row .bw{margin:0;font-size:17px}
+.sp .hc .row .sub{color:var(--sub);font-size:12px}
+.sp .hc .note{padding:8px 10px;border-top:1px solid var(--line);font-size:16.5px;line-height:1.65}
+.sp .hc details{border-top:1px solid var(--line)}
+.sp .hc summary{padding:8px 10px;font-weight:700;cursor:pointer;color:var(--sub)}
+.sp .hc .rl{display:flex;gap:8px;align-items:baseline;padding:5px 10px;border-top:1px dashed var(--line);font-size:13px;background:var(--rx)}
+.sp .hc .rl.c1{background:var(--r1)} .sp .hc .rl.c2{background:var(--r2)} .sp .hc .rl.c3{background:var(--r3)}
+.sp .hc .rl .rk{font-size:18px;font-weight:800;min-width:46px}
+.sp .hc .rl.c1 .rk{color:var(--r1fg)} .sp .hc .rl.c2 .rk{color:var(--r2fg)} .sp .hc .rl.c3 .rk{color:var(--r3fg)}
+.sp .hc .rl .sub{color:var(--sub);font-size:12px}
+.sp .hc .recs{padding:6px 10px;color:var(--sub);font-size:12.5px;border-top:1px dashed var(--line)}
+.shimen{display:inline-block;margin-top:8px;padding:6px 12px;border-radius:6px;background:#17130a;color:#e8c56a;border:1px solid #c9a45c;text-decoration:none;font-weight:700;font-size:13px}
+@media print{ .shimen{display:none} }
+@media (max-width:760px){ main{width:auto;padding:10px 10px 40px} .race .art{font-size:15px} }
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="javascript:history.back()">← 速報にもどる</a>
+  <h1 id="ttl">競馬新聞</h1><span class="upd" id="upd"></span>
+  <div class="tabs" id="vtabs"></div>
+  <div class="tabs rtabs" id="rtabs"></div>
+</header>
+<main id="main"><div class="empty">データを読み込み中…</div></main>
+<script>
+const RELOAD_SEC = 30;
+// 公開版：場ごとのページ（saga/ kochi/ …）では SHINBUN_BASE="../" と SHINBUN_VENUE="佐賀" が入る（11/7 テツさん「佐賀と高知を分けて」）
+const BASE = window.SHINBUN_BASE || "", LOCK = window.SHINBUN_VENUE || null;
+let sel = {v: null, r: null};
+(function(){ const m = decodeURIComponent(location.hash.slice(1)).match(/^(.+?)-(\d+)$/); if (m) sel = {v: m[1], r: +m[2]}; })();
+
+const esc = s => (s == null ? "" : String(s)).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dash = v => (v == null || v === "" ? "―" : v);
+function tm(sec){ if (sec == null) return "―"; const m = Math.floor(sec / 60), s = (sec - m * 60).toFixed(1); return m ? `${m}:${s.padStart(4, "0")}` : s; }
+function md(d){ if (!d) return "―"; const p = d.split("-"); return `${+p[1]}/${+p[2]}`; }
+function rec(a){ return a ? a.join("-") : "―"; }
+
+function runCell(r){
+  if (!r) return `<td class="run none">―</td>`;
+  const c = r.rank === 1 ? "c1" : r.rank === 2 ? "c2" : r.rank === 3 ? "c3" : "";
+  const surf = r.turf ? "芝" : "ダ";
+  const mg = r.margin != null ? r.margin : (r.kmargin || "");
+  return `<td class="run ${c}">
+    <div class="top"><span>${md(r.date)} ${esc(r.track)}${r.jra ? ' <span class="jra">JRA</span>' : ""}</span><span>${esc(r.going || "")}</span></div>
+    <div class="rk">${r.rank != null ? r.rank + "着" : "―"}<small>${r.pop ? r.pop + "人" : ""} ${r.heads ? r.heads + "頭" : ""}${r.gate ? r.gate + "番" : ""}</small></div>
+    <div>${surf}${dash(r.dist)} <b>${tm(r.time)}</b> 上${dash(r.last3f)}</div>
+    <div>${esc(r.corner || "―")}${r.pace ? " ペース" + esc(r.pace) : ""}${mg !== "" ? " 差" + esc(mg) : ""}</div>
+    <div>${esc(r.jockey || "")} ${r.kinryo ? r.kinryo : ""} ${r.weight ? r.weight + "kg" : ""}</div>
+    ${r.cls ? `<div class="cls">${esc(r.cls)}</div>` : ""}
+  </td>`;
+}
+
+const MK_CLS = {"◎": "m0", "○": "m1", "▲": "m1", "△": "", "☆": "", "注": "ms", "穴": "ms"};
+function mk(v, total){ return `<div class="mcol ${v ? (MK_CLS[v] ?? "ms") : ""}${total ? " tot" : ""}">${v ? esc(v) : ""}</div>`; }
+
+function horseRows(h, race){
+  const runs = [0,1,2,3,4].map(i => runCell(h.runs[i])).join("");
+  const hot = h.pop && h.pop <= 3 ? " hot" : "";
+  let bw = "";
+  if (h.bw) { const d = h.bwd; const cls = d > 0 ? "up" : d < 0 ? "dn" : ""; bw = `${h.bw}<span class="d ${cls}">(${d > 0 ? "+" : ""}${d != null ? d : "?"})</span>`; }
+  const recs = [];
+  if (h.here) recs.push("場 " + rec(h.here));
+  if (h.dist_rec) recs.push("距 " + rec(h.dist_rec));
+  if (h.overall) recs.push("通算 " + rec(h.overall));
+  if (h.pair_weight) recs.push("連対体重 " + esc(h.pair_weight));
+  const meta1 = [h.sexage, h.kinryo ? h.kinryo + "kg" : null, h.style].filter(Boolean).join(" ");
+  const meta2 = h.sire ? "父 " + h.sire : "";
+  // 短評：騎手のことだけ書いた文（「〇〇騎手と…」）は外す（11/7 テツさん）。調教タイムは出さない
+  const cut = t => (t || "").split(/(?<=。)/).filter(x => x.trim() && !/騎手/.test(x)).join("");
+  const note = [cut(h.body), cut(h.column)].filter(Boolean).map(esc).join("<br>");
+  const row1 = `<tr class="w${h.frame}">
+    <td class="sticky"><div class="hn">
+      <div class="fr f${h.frame}">${h.no}<small>${h.frame}枠</small></div>
+      ${mk(h.mP)}${mk(h.mD)}${mk(h.mT, true)}
+      <div class="who">
+        <div class="sire">${h.sire ? "父 " + esc(h.sire) : "&nbsp;"}</div>
+        <div class="nm">${esc(h.name)}</div>
+        <div class="meta">${esc([h.sexage, h.style].filter(Boolean).join(" "))}${h.layoff ? `　中${h.layoff}日` : ""}</div>
+        <div class="kyu"><span class="lb">厩舎</span>${esc(h.trainer || "―")}</div>
+        ${h.tag && h.tag !== "佐賀近走あり" && !/^[-－ー―]+$/.test(h.tag) ? `<div class="tag">${esc((h.tag.match(/【[^】]*】/) || [h.tag])[0])}</div>` : ""}
+      </div>
+      <div class="jbox">
+        ${h.jchg ? '<div class="jchg">乗替</div>' : ""}
+        <div class="jn">${esc(h.jockey || "―")}</div>
+        <div class="kn">${h.kinryo ? Number(h.kinryo).toFixed(1) : "―"}</div>
+      </div>
+      </div></div></td>
+    <td class="live"><div class="odds${hot}">${h.odds != null ? h.odds.toFixed(1) : "―"}</div>
+      <div class="pop">${h.pop ? h.pop + "番人気" : "オッズ前"}</div>
+      <div class="bw">${bw || '<span class="pop">体重 未発表</span>'}</div>
+      <div class="rec">${recs.join("<br>")}</div></td>
+    ${runs}<td class="tanpyo">${note || '<span class="pop">―</span>'}</td></tr>`;
+  return row1;
+}
+
+
+const isSP = () => window.matchMedia("(max-width:760px)").matches;
+function runLine(r){
+  if (!r) return "";
+  const c = r.rank === 1 ? "c1" : r.rank === 2 ? "c2" : r.rank === 3 ? "c3" : "";
+  const mg = r.margin != null ? r.margin : (r.kmargin || "");
+  return `<div class="rl ${c}"><span class="rk">${r.rank != null ? r.rank + "着" : "―"}</span>
+    <span><b>${md(r.date)} ${esc(r.track)}</b> ${r.turf ? "芝" : "ダ"}${dash(r.dist)} ${esc(r.going || "")}　<b>${tm(r.time)}</b> 上${dash(r.last3f)}<br>
+    <span class="sub">${r.heads ? r.heads + "頭" : ""}${r.gate ? r.gate + "番" : ""} ${r.pop ? r.pop + "人気" : ""} ${esc(r.corner || "")}${mg !== "" ? " 差" + esc(mg) : ""} ${esc(r.jockey || "")}${r.weight ? " " + r.weight + "kg" : ""}${r.cls ? " " + esc(r.cls) : ""}</span></span></div>`;
+}
+function horseCard(h, R){
+  const cut = t => (t || "").split(/(?<=。)/).filter(x => x.trim() && !/騎手/.test(x)).join("");
+  const note = [cut(h.body), cut(h.column)].filter(Boolean).map(esc).join("<br>");
+  const hot = h.pop && h.pop <= 3 ? " hot" : "";
+  let bw = '<span class="sub">体重 未発表</span>';
+  if (h.bw) { const d = h.bwd; const cls = d > 0 ? "up" : d < 0 ? "dn" : ""; bw = `${h.bw}<span class="d ${cls}">(${d > 0 ? "+" : ""}${d != null ? d : "?"})</span>`; }
+  const m2 = (v, lb, tot) => `<div class="mk2${tot ? " tot" : ""}"><small>${lb}</small><b class="${v === "◎" ? "m0" : ""}">${v ? esc(v) : ""}</b></div>`;
+  const recs = [];
+  if (h.here) recs.push("場 " + rec(h.here));
+  if (h.dist_rec) recs.push("距 " + rec(h.dist_rec));
+  if (h.overall) recs.push("通算 " + rec(h.overall));
+  if (h.pair_weight) recs.push("連対体重 " + esc(h.pair_weight));
+  const tag = h.tag && h.tag !== "佐賀近走あり" && !/^[-－ー―]+$/.test(h.tag) ? ` <span class="tag">${esc((h.tag.match(/【[^】]*】/) || [h.tag])[0])}</span>` : "";
+  const runs = (h.runs || []).slice(0, 5);
+  return `<div class="hc w${h.frame}">
+    <div class="top"><div class="fr f${h.frame}">${h.no}<small>${h.frame}枠</small></div>
+      <div class="nmb"><div class="sire">${h.sire ? "父 " + esc(h.sire) : "&nbsp;"}</div><div class="nm">${esc(h.name)}</div>
+        <div class="meta">${esc([h.sexage, h.style].filter(Boolean).join(" "))}${h.layoff ? `　中${h.layoff}日` : ""}${tag}</div></div>
+      <div class="mks">${m2(h.mP, "パドック")}${m2(h.mD, "データ")}${m2(h.mT, R.total_zantei ? "暫定" : "総合", true)}</div></div>
+    <div class="row"><span class="jn">${esc(h.jockey || "―")}</span><span class="kn">${h.kinryo ? Number(h.kinryo).toFixed(1) : "―"}</span>${h.jchg ? '<span class="jchg" style="font-size:11px;color:#fff;background:var(--warn);border-radius:3px;padding:0 4px">乗替</span>' : ""}
+      <span class="sub">厩舎 ${esc(h.trainer || "―")}</span></div>
+    <div class="row"><span class="odds${hot}">${h.odds != null ? h.odds.toFixed(1) : "―"}</span><span class="sub">${h.pop ? h.pop + "番人気" : "オッズ前"}</span><span class="bw">${bw}</span></div>
+    ${note ? `<div class="note">${note}</div>` : ""}
+    <details><summary>前5走を見る</summary>${runs.map(runLine).join("") || '<div class="rl">近走なし</div>'}${recs.length ? `<div class="recs">${recs.join("　")}</div>` : ""}</details>
+  </div>`;
+}
+
+function render(){
+  const D0 = window.SEISEKI;
+  const D = D0 && LOCK ? Object.assign({}, D0, {tracks: (D0.tracks || []).filter(t => t.venue === LOCK)}) : D0;
+  if (LOCK) sel.v = LOCK;
+  const main = document.getElementById("main");
+  if (!D || !D.tracks || !D.tracks.length) { main.innerHTML = '<div class="empty">まだデータがありません（seiseki.py を動かしてください）</div>'; return; }
+  document.getElementById("upd").textContent = D.updated ? `${D.date}　更新 ${D.updated}` : D.date;
+  const T = D.tracks.find(t => t.venue === sel.v) || D.tracks[0];
+  sel.v = T.venue;
+  if (!T.races.find(r => r.no === sel.r)) {
+    const now = new Date(), hm = now.getHours() * 60 + now.getMinutes();
+    const next = T.races.find(r => r.post && (+r.post.split(":")[0] * 60 + +r.post.split(":")[1]) >= hm);
+    sel.r = (next || T.races[T.races.length - 1]).no;
+  }
+  document.getElementById("ttl").textContent = `${T.venue} 競馬新聞`;
+  document.getElementById("vtabs").innerHTML = D.tracks.length > 1 ? D.tracks.map(t => `<button class="${t.venue === sel.v ? "on" : ""}" data-v="${esc(t.venue)}">${esc(t.venue)}</button>`).join("") : "";
+  document.getElementById("rtabs").innerHTML = T.races.map(r => `<button class="${r.no === sel.r ? "on" : ""}" data-r="${r.no}">${r.no}R<small>${esc(r.post || "")}</small></button>`).join("");
+  const R = T.races.find(r => r.no === sel.r);
+  if (R.updated) document.getElementById("upd").textContent = `${D.date}　${R.no}R 更新 ${R.updated}`;
+  if (!R.horses) { main.innerHTML = '<div class="empty">' + T.venue + ' ' + R.no + 'R を読み込み中…</div>'; return; }
+  const chips = [];
+  if (R.pace) chips.push(`予想ペース ${esc(R.pace)}`);
+  if (R.short) chips.push(esc(R.short));
+  main.innerHTML = `<div class="race">
+      <h2>${T.venue} ${R.no}R　${esc((R.cls || "").replace(/－?□/g, ""))}</h2>
+      <div class="info">${esc(R.post || "")}発走　${esc(R.surface === "芝" ? "芝" : "ダ")}${dash(R.dist)}m　${R.horses.length}頭　${chips.map(c => `<span class="chip">${c}</span>`).join("")}</div>
+      ${R.article || R.key ? `<div class="art">${esc(R.article || "")}${R.key ? "<br><b>カギ</b> " + esc(R.key) : ""}</div>` : ""}
+      <div class="legend">印：総合予想は${R.total_zantei ? "いまは暫定予想（パドック解析が終わったら総合予想に替わります）" : "確定"}　パドック予想はパドック解析後に入ります　／　着順の色：<span style="color:var(--r1fg)">1着</span>・<span style="color:var(--r2fg)">2着</span>・<span style="color:var(--r3fg)">3着</span>　／　オッズ・馬体重は自動で入れ替わります</div>
+      <a class="shimen" href="${BASE}shimen/${encodeURIComponent(T.venue)}/#r${R.no}">紙面で見る（${R.no}R）</a>
+    </div>
+    ${isSP() ? `<div class="sp">${R.horses.map(h => horseCard(h, R)).join("")}</div>` : `<div class="wrap"><table>
+      <tr><th class="sticky" style="padding:0"><div class="hh"><span class="hf">枠<br>馬番</span><span class="hm">パドック<br>予想</span><span class="hm">データ<br>解析</span><span class="hm S">${R.total_zantei ? "暫定<br>予想" : "総合<br>予想"}</span><span class="hn2">馬名・厩舎</span><span class="hj">騎手<br>斤量</span></div></th><th>オッズ・馬体重</th><th>前走</th><th>2走前</th><th>3走前</th><th>4走前</th><th>5走前</th><th>短評</th></tr>
+      ${R.horses.map(h => horseRows(h, R)).join("")}
+    </table></div>`}`;
+  history.replaceState(null, "", "#" + encodeURIComponent(`${sel.v}-${sel.r}`));
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.v) { sel = {v: b.dataset.v, r: null}; render(); loadRace(); }
+  if (b.dataset.r) { sel.r = +b.dataset.r; render(); loadRace(); }
+});
+
+/* 自動更新は当該レースだけ（11/7 テツさん）：
+   data/index.js（場とレースの一覧）を最初と5分おきに読み、見とるレースの data/<場コード>_<R>.js だけ30秒おきに読み直す。
+   data/ が無いとき（古い書き出し）は seiseki_data.js を丸ごと読む。 */
+function inject(src, ok, ng){
+  const s = document.createElement("script");
+  s.src = src + "?t=" + Date.now();
+  s.onload = () => { s.remove(); ok && ok(); };
+  s.onerror = () => { s.remove(); ng && ng(); };
+  document.head.appendChild(s);
+}
+let SPLIT = true; const LAST = {};
+function loadAll(){ inject(BASE + "seiseki_data.js", render, render); }
+function loadIndex(){
+  inject(BASE + "data/index.js", () => {
+    const I = window.SEISEKI_INDEX; if (!I) return;
+    const old = window.SEISEKI && window.SEISEKI.tracks ? window.SEISEKI : {tracks: []};
+    window.SEISEKI = {date: I.date, tracks: I.tracks.map(t => {
+      const ot = old.tracks.find(x => x.venue === t.venue) || {races: []};
+      return {venue: t.venue, baba: t.baba, races: t.races.map(r => ot.races.find(x => x.no === r.no && x.horses) || Object.assign({}, r))};
+    })};
+    render(); loadRace();
+  }, () => { SPLIT = false; loadAll(); });
+}
+function loadRace(){
+  if (!SPLIT) return loadAll();
+  const D = window.SEISEKI; if (!D || !D.tracks) return;
+  const T = D.tracks.find(t => t.venue === sel.v); if (!T || sel.r == null) return;
+  inject(`${BASE}data/${T.baba}_${sel.r}.js`, () => {
+    const R = window.SEISEKI_RACE; if (!R) return;
+    // 中身が変わった時だけ描き直す（スクロール位置や開いた「前5走」が戻らんように）
+    const key = `${T.baba}_${R.no}`, body = JSON.stringify(R);
+    if (LAST[key] === body) return;
+    LAST[key] = body;
+    const i = T.races.findIndex(x => x.no === R.no);
+    if (i >= 0) T.races[i] = R; else T.races.push(R);
+    if (T.venue === sel.v && R.no === sel.r) {
+      const open = [...document.querySelectorAll(".hc details")].map(d => d.open), y = window.scrollY;
+      render();
+      document.querySelectorAll(".hc details").forEach((d, k) => { if (open[k]) d.open = true; });
+      window.scrollTo(0, y);
+    }
+  });
+}
+if (LOCK) { const b = document.querySelector("a.back"); b.href = BASE || "./"; b.textContent = "← 開催場の一覧"; }
+let _sp = isSP(); window.addEventListener("resize", () => { if (isSP() !== _sp) { _sp = isSP(); render(); } });
+loadIndex();
+setInterval(loadRace, RELOAD_SEC * 1000);
+setInterval(() => SPLIT && loadIndex(), 5 * 60 * 1000);
+</script>
+</body>
+</html>
