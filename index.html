@@ -298,16 +298,39 @@ document.addEventListener("click", e => {
   if (b.dataset.r) { sel.r = +b.dataset.r; render(); }
 });
 
-function load(){
+// 自動更新は「いま見とるレース」だけ（11/7 テツさん）。ほかのレースが変わっても画面は触らん。
+// 見とるレースが変わったときだけ描き直し、横スクロール位置と開いとる「前5走」はそのまま残す。
+function curRaceKey(){
+  const D = window.SEISEKI; if (!D || !D.tracks) return "";
+  const T = D.tracks.find(t => t.venue === sel.v); if (!T) return "";
+  const R = T.races.find(r => r.no === sel.r); return R ? JSON.stringify(R) : "";
+}
+let _lastKey = null;
+function load(auto){
   const s = document.createElement("script");
   s.src = "seiseki_data.js?t=" + Date.now();
-  s.onload = () => { render(); s.remove(); };
-  s.onerror = () => { render(); s.remove(); };
+  const done = () => {
+    s.remove();
+    if (!auto || _lastKey === null) { render(); _lastKey = curRaceKey(); return; }
+    const D = window.SEISEKI;
+    if (D && D.updated) document.getElementById("upd").textContent = `${D.date}　更新 ${D.updated}`;
+    const k = curRaceKey();
+    if (!k || k === _lastKey) return;          // 見とるレースに変化なし → 描き直さん
+    const w = document.querySelector(".wrap"), sx = w ? w.scrollLeft : 0, sy = window.scrollY;
+    const open = [...document.querySelectorAll(".hc details")].map(d => d.open);
+    render(); _lastKey = k;
+    const w2 = document.querySelector(".wrap"); if (w2) w2.scrollLeft = sx;
+    document.querySelectorAll(".hc details").forEach((d, i) => { if (open[i]) d.open = true; });
+    window.scrollTo(0, sy);
+  };
+  s.onload = done; s.onerror = done;
   document.head.appendChild(s);
 }
+const _render0 = render;
+render = function(){ _render0(); _lastKey = curRaceKey(); };
 let _sp = isSP(); window.addEventListener("resize", () => { if (isSP() !== _sp) { _sp = isSP(); render(); } });
-load();
-setInterval(load, RELOAD_SEC * 1000);
+load(false);
+setInterval(() => load(true), RELOAD_SEC * 1000);
 </script>
 </body>
 </html>
